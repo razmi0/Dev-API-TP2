@@ -1,11 +1,8 @@
 <?php
 
-namespace Middleware\Validators;
+namespace API\Middleware\Validators;
 
-require_once "ValidatorResult.php";
-
-
-use Validator\ValidatorResult;
+use API\Middleware\Validators\ValidatorResult;
 
 
 /**

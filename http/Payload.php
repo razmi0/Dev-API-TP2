@@ -1,6 +1,6 @@
 <?php
 
-namespace HTTP;
+namespace API\HTTP;
 
 require_once "vendor/autoload.php";
 

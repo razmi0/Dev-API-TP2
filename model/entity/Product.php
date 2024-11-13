@@ -1,6 +1,6 @@
 <?php
 
-namespace Model\Entity;
+namespace API\Model\Entity;
 
 /**
  * Class Product

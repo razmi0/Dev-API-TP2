@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Middleware\Validators;
+namespace API\Middleware\Validators;
 
 
 /**

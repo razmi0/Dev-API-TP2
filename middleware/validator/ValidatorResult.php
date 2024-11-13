@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Validator;
+namespace API\Middleware\Validators;
 
 /**
  * Class ValidatorResult

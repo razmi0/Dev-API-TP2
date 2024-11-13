@@ -1,10 +1,10 @@
 <?php
 
-namespace Model\Dao;
+namespace API\Model\Dao;
 
 use Exception;
-use Model\{Entity\Product, Dao\Connection};
-use HTTP\Error as Error;
+use API\Model\{Entity\Product, Dao\Connection};
+use API\HTTP\Error as Error;
 use PDO;
 
 

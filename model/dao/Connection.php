@@ -1,6 +1,6 @@
 <?php
 
-namespace Model\Dao;
+namespace API\Model\Dao;
 
 use PDO;
 use PDOException;

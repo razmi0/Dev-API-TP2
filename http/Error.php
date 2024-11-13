@@ -1,6 +1,6 @@
 <?php
 
-namespace HTTP;
+namespace API\HTTP;
 
 use Psr\Http\Message\ResponseInterface as Response;
 
