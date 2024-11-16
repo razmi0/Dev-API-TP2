@@ -15,6 +15,7 @@ use API\{
     Controller\Products,
     Middleware\IdMiddleware,
 };
+use API\Middleware\BodyValidationMiddleware;
 
 const PROJECT_ROOT = __DIR__ . "/..";
 
@@ -65,7 +66,8 @@ $error_handler = $error_middleware->getDefaultErrorHandler();
 $error_handler->forceContentType('application/json');
 
 
-
+$app // We add all headers to all responses
+    ->add(HeaderMiddleware::class);
 
 
 
@@ -77,23 +79,27 @@ $error_handler->forceContentType('application/json');
 
 $app->group("/api/v1.0/produit/", function (RouteCollectorProxy $group) {
 
-    // list query params : 
-    // - limit : number of products to return
-    // - offset : number of products to skip
-    // - order : order by a column
-    $group->get("list", [Products::class, "list"]);
+
+
+    $group->group("", function (RouteCollectorProxy $group) {
+
+        // list query params : limit, offset, order
+        $group->get("list", [Products::class, "list"]);
+
+        $group->post("new", [Products::class, "create"]);
+
+        $group->delete("delete", [Products::class, "delete"]);
+
+        $group->put("update", [Products::class, "update"]);
+    })
+        ->add(BodyValidationMiddleware::class);
+
+
 
     $group->get("listone/{id:[0-9]+}", [Products::class, "listOne"])
         ->add(IdMiddleware::class);
+});
 
-    $group->post("new", [Products::class, "create"]);
-
-    $group->delete("delete", [Products::class, "delete"]);
-
-    $group->put("update", [Products::class, "update"]);
-})
-    // We add all headers to all responses
-    ->add(HeaderMiddleware::class);
 
 
 $app->run();
