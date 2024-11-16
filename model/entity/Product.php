@@ -132,4 +132,9 @@ class Product
             "date_creation" => $this->date_creation
         ];
     }
+
+    public static function toArrayBulk(array $products): array
+    {
+        return array_map(fn($product) => $product->toArray(), $products);
+    }
 }

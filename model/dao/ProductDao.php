@@ -25,9 +25,8 @@ use API\Model\{Entity\Product, Dao\Connection};
 class ProductDao
 {
     private ?PDO $pdo = null;
-    private ?Connection $connection = null;
 
-    public function __construct(Connection $connection)
+    public function __construct(private Connection $connection)
     {
         $this->connection = $connection;
         $this->pdo = $this->connection->getPDO();
