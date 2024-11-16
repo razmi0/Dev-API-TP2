@@ -53,11 +53,9 @@ $collector = $app->getRouteCollector();
 $collector->setDefaultInvocationStrategy(new RequestResponseArgs());
 
 // Decode Body middleware
-
 $app->addBodyParsingMiddleware();
 
 // Error Middleware
-
 $error_middleware = $app->addErrorMiddleware(true, true, true);
 
 // Get the default error handler
@@ -66,31 +64,36 @@ $error_handler = $error_middleware->getDefaultErrorHandler();
 // Force the content type to be JSON for all errors
 $error_handler->forceContentType('application/json');
 
-// We add all headers to all responses
-$app->add(HeaderMiddleware::class);
+
+
+
+
 
 // API
 // --
 
-// Liste tous les produits
-// query params: limit, offset, direction
-$app->get("/api/v1.0/produit/list", [Products::class, "list"]);
 
 
-// Liste un produit
-$app->get("/api/v1.0/produit/listone/{id:[0-9]+}", [Products::class, "listOne"])
-    ->add(IdMiddleware::class);
 
+$app->group("/api/v1.0/produit/", function (RouteCollectorProxy $group) {
 
-// Creer un produit
-$app->post("/api/v1.0/produit/new", [Products::class, "create"]);
+    // list query params : 
+    // - limit : number of products to return
+    // - offset : number of products to skip
+    // - order : order by a column
+    $group->get("list", [Products::class, "list"]);
 
+    $group->get("listone/{id:[0-9]+}", [Products::class, "listOne"])
+        ->add(IdMiddleware::class);
 
-// Supprimer un produit
-$app->delete("/api/v1.0/produit/delete", [Products::class, "delete"]);
+    $group->post("new", [Products::class, "create"]);
 
+    $group->delete("delete", [Products::class, "delete"]);
 
-// Update a product
-$app->put("/api/v1.0/produit/update", [Products::class, "update"]);
+    $group->put("update", [Products::class, "update"]);
+})
+    // We add all headers to all responses
+    ->add(HeaderMiddleware::class);
+
 
 $app->run();
