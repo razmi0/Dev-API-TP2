@@ -53,6 +53,9 @@ class Products
     ) {}
 
 
+    /**
+     * LIST
+     */
     public function list(Request $request, Response $response)
     {
         $client_data = $request->getParsedBody();
@@ -124,6 +127,11 @@ class Products
         return $response->withStatus(200);
     }
 
+
+
+    /**
+     * LISTONE
+     */
     public function listOne(Request $request, Response $response, string $id)
     {
 
@@ -162,6 +170,12 @@ class Products
         return $response->withStatus(200);
     }
 
+
+
+
+    /**
+     * CREATE
+     */
     public function create(Request $request, Response $response)
     {
 
@@ -225,6 +239,12 @@ class Products
         return $response->withStatus(201);
     }
 
+
+
+
+    /**
+     * DELETE
+     */
     public function delete(Request $request, Response $response)
     {
 
@@ -276,6 +296,13 @@ class Products
         return $response->withStatus(200);
     }
 
+
+
+
+
+    /**
+     * UPDATE
+     */
     public function update(Request $request, Response $response)
     {
 
@@ -285,8 +312,6 @@ class Products
          */
         $client_data = $request->getParsedBody();
 
-
-        // data here
 
         $isValid = $this->runValidation(self::UPDATE_RULES, $client_data);
 
@@ -339,6 +364,8 @@ class Products
         $this->validator->mapFieldsRules($rules);
 
         $validator = $this->validator->withData($data);
+
+        $this->validator = $validator;
 
         return $validator->validate();
     }
