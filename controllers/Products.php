@@ -10,37 +10,9 @@ use Psr\{
     Http\Message\ResponseInterface as Response,
     Http\Message\ServerRequestInterface as Request,
 };
-use Valitron\Validator;
 
 class Products
 {
-
-    public const NAME_REGEX = "/^[a-zA-Z0-9-'%,.:\/&()|; ]+$/";
-    public const DESCRIPTION_REGEX = "/^[a-zA-Z0-9-'%,.:\/&()|; ]+$/";
-
-
-    const UPDATE_RULES = [
-        'id' => ['required', 'integer', ['min', 1]],
-        'name' => ['optional', ['lengthBetween', 3, 50], ['regex', self::NAME_REGEX]],
-        'description' => ['optional', ['lengthBetween', 3, 255], ['regex', self::DESCRIPTION_REGEX]],
-        'prix' => ['required', 'numeric', ['min', 0]]
-    ];
-
-    const CREATE_RULES = [
-        'name' => ['required', ['lengthBetween', 3, 50], ['regex', self::NAME_REGEX]],
-        'description' => ['required', ['lengthBetween', 3, 255], ['regex', self::DESCRIPTION_REGEX]],
-        'prix' => ['required', 'numeric', ['min', 0]]
-    ];
-
-    const DELETE_RULES = [
-        'id' => ['required', 'integer', ['min', 1]]
-    ];
-
-    const LIST_RULES = [
-        'limit' => ['optional', 'integer', ['min', 1]],
-        'offset' => ['optional', 'integer', ['min', 0]],
-        'direction' => ['optional', ['in', ['ASC', 'DESC']]]
-    ];
 
 
     public function __construct(
@@ -53,7 +25,6 @@ class Products
          */
 
         private ProductDao $dao,
-        private Validator $validator
     ) {}
 
 
@@ -63,23 +34,6 @@ class Products
     public function list(Request $request, Response $response)
     {
         $client_data = $request->getParsedBody();
-
-        $isValid = $this->runValidation(self::LIST_RULES, $client_data);
-
-        if ($isValid === false) {
-
-            $payload = json_encode(
-                [
-                    "message" => "Les données fournies ne sont pas valides.",
-                    "data" => $this->validator->errors(),
-                    "error" => "Bad Request"
-                ]
-            );
-
-            $response->getBody()->write($payload);
-
-            return $response->withStatus(400);
-        }
 
         // Get the limit from the request if it exists in query params or body
         $limit =
@@ -186,26 +140,6 @@ class Products
         // Get the body of the request
         $client_data = $request->getParsedBody();
 
-
-        // Validate the data
-        $isValid = $this->runValidation(self::CREATE_RULES, $client_data);
-
-        // If the body is empty, throw an error
-        if ($isValid === false) {
-
-            $payload = json_encode(
-                [
-                    "message" => "Aucune donnée n'a été fournie dans la requête.",
-                    "data" => $this->validator->errors(),
-                    "error" => "Bad Request"
-                ]
-            );
-
-            $response->getBody()->write($payload);
-
-            return $response->withStatus(400);
-        }
-
         // Create a new Product object
         $newProduct = Product::make($client_data);
 
@@ -259,26 +193,6 @@ class Products
          */
         $id = (int)$request->getParsedBody()['id'] ?? null;
 
-        // validation 
-        $isValid = $this->runValidation(self::DELETE_RULES, ['id' => $id]);
-
-
-        if ($isValid === false) {
-
-            $payload = json_encode(
-                [
-                    "message" => "Aucun id de produit n'a été fourni dans le body de la requête.",
-                    "data" => $this->validator->errors(),
-                    "error" => "Bad Request"
-                ]
-            );
-
-            $response->getBody()->write($payload);
-
-            return  $response->withStatus(400);
-        }
-
-
         // Get the product from the database
         $affectedRows = $this->dao->deleteById($id);
 
@@ -316,25 +230,6 @@ class Products
          */
         $client_data = $request->getParsedBody();
 
-
-        $isValid = $this->runValidation(self::UPDATE_RULES, $client_data);
-
-        // Validate the data
-        if ($isValid === false) {
-
-            $payload = json_encode(
-                [
-                    "message" => "Les données fournies ne sont pas valides.",
-                    "data" => $this->validator->errors(),
-                    "error" => "Bad Request"
-                ]
-            );
-
-            $response->getBody()->write($payload);
-
-            return $response->withStatus(400);
-        }
-
         // Create a new Product
         $product = Product::make($client_data);
 
@@ -359,20 +254,5 @@ class Products
         $response->getBody()->write($payload);
 
         return $response->withStatus(200);
-    }
-
-
-
-
-    private function runValidation(array $rules, mixed $data): bool
-    {
-
-        $this->validator->mapFieldsRules($rules);
-
-        $validator = $this->validator->withData($data);
-
-        $this->validator = $validator;
-
-        return $validator->validate();
     }
 }
