@@ -1,17 +1,6 @@
 <?php
 
-use API\Middleware\HeaderMiddleware;
-use API\Model\Dao\{Connection, ProductDao};
-
-use Psr\{
-    Container\ContainerInterface,
-    Http\Message\ResponseInterface,
-};
-use Psr\Http\Message\ResponseFactoryInterface;
-use Slim\Middleware\BodyParsingMiddleware;
-use Slim\Psr7\Factory\ResponseFactory;
-use Slim\Routing\RouteCollector;
-use Valitron\Validator;
+use API\Model\Dao\{Connection};
 
 /**
  * Dependency Injection configuration
