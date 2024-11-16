@@ -6,18 +6,12 @@ use DI\Container;
 
 use Slim\{
     Factory\AppFactory,
-    Handlers\Strategies\RequestResponseArgs
-};
-
-use Psr\{
-    Http\Message\ResponseInterface as Response,
-    Http\Message\ServerRequestInterface as Request,
+    Handlers\Strategies\RequestResponseArgs,
+    Routing\RouteCollectorProxy
 };
 
 use API\{
     Middleware\HeaderMiddleware,
-    Model\Dao\ProductDao,
-    Model\Entity\Product,
     Controller\Products,
     Middleware\IdMiddleware,
 };
