@@ -15,16 +15,26 @@ use Valitron\Validator;
 class Products
 {
 
+    /**
+     * class Constant
+     * 
+     * All those constants emerged from the database and are use to validate the client data
+     * 
+     */
+    public const NAME_REGEX = "/^[a-zA-Z0-9-'%,.:\/&()|; ]+$/";
+    public const DESCRIPTION_REGEX = "/^[a-zA-Z0-9-'%,.:\/&()|; ]+$/";
+
+
     const UPDATE_RULES = [
         'id' => ['required', 'integer', ['min', 1]],
-        'name' => ['optional', ['lengthBetween', 3, 50]],
-        'description' => ['optional', ['lengthBetween', 3, 255]],
+        'name' => ['optional', ['lengthBetween', 3, 50], ['regex', self::NAME_REGEX]],
+        'description' => ['optional', ['lengthBetween', 3, 255], ['regex', self::DESCRIPTION_REGEX]],
         'prix' => ['required', 'numeric', ['min', 0]]
     ];
 
     const CREATE_RULES = [
-        'name' => ['required', ['lengthBetween', 3, 50]],
-        'description' => ['required', ['lengthBetween', 3, 255]],
+        'name' => ['required', ['lengthBetween', 3, 50], ['regex', self::NAME_REGEX]],
+        'description' => ['required', ['lengthBetween', 3, 255], ['regex', self::DESCRIPTION_REGEX]],
         'prix' => ['required', 'numeric', ['min', 0]]
     ];
 
