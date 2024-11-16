@@ -15,12 +15,6 @@ use Valitron\Validator;
 class Products
 {
 
-    /**
-     * class Constant
-     * 
-     * All those constants emerged from the database and are use to validate the client data
-     * 
-     */
     public const NAME_REGEX = "/^[a-zA-Z0-9-'%,.:\/&()|; ]+$/";
     public const DESCRIPTION_REGEX = "/^[a-zA-Z0-9-'%,.:\/&()|; ]+$/";
 
