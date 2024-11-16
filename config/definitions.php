@@ -7,7 +7,11 @@ use Psr\{
     Container\ContainerInterface,
     Http\Message\ResponseInterface,
 };
-
+use Psr\Http\Message\ResponseFactoryInterface;
+use Slim\Middleware\BodyParsingMiddleware;
+use Slim\Psr7\Factory\ResponseFactory;
+use Slim\Routing\RouteCollector;
+use Valitron\Validator;
 
 /**
  * Dependency Injection configuration
