@@ -69,10 +69,10 @@ $error_middleware = $app->addErrorMiddleware(true, true, true);
 // Get the default error handler
 $error_handler = $error_middleware->getDefaultErrorHandler();
 
-// Force the content type to be JSON
+// Force the content type to be JSON for all errors
 $error_handler->forceContentType('application/json');
 
-// Header middleware
+// We add all headers to all responses
 $app->add(HeaderMiddleware::class);
 
 // API
