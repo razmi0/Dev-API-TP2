@@ -43,8 +43,9 @@ class Products
 
         /**
          * Create a new ProductDao object from DI container
-         * PHP DI autowiring will inject the Connection object as we defined it into the ProductDao constructor
-         * @see model/dao/ProductDao.php
+         * ProductDao has Connection as a dependency
+         * PHP DI autowiring will inject the Connection object as we defined it
+         * @see ../config/definitions.php
          */
 
         private ProductDao $dao,
@@ -284,7 +285,8 @@ class Products
          */
         $client_data = $request->getParsedBody();
 
-        var_dump($client_data);
+
+        // data here
 
         $isValid = $this->runValidation(self::UPDATE_RULES, $client_data);
 
@@ -334,11 +336,10 @@ class Products
     private function runValidation(array $rules, mixed $data): bool
     {
 
-
         $this->validator->mapFieldsRules($rules);
 
-        $this->validator->withData($data);
+        $validator = $this->validator->withData($data);
 
-        return $this->validator->validate();
+        return $validator->validate();
     }
 }
