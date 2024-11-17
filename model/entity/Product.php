@@ -133,6 +133,11 @@ class Product
         ];
     }
 
+    public function toJson()
+    {
+        return json_encode($this->toArray());
+    }
+
     public static function toArrayBulk(array $products): array
     {
         return array_map(fn($product) => $product->toArray(), $products);
