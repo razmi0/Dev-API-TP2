@@ -7,15 +7,8 @@ use DI\Container;
 use Slim\{
     Factory\AppFactory,
     Handlers\Strategies\RequestResponseArgs,
-    Routing\RouteCollectorProxy
 };
 
-use API\{
-    Middleware\HeaderMiddleware,
-    Controller\Products,
-    Middleware\IdMiddleware,
-};
-use API\Middleware\BodyValidationMiddleware;
 
 const PROJECT_ROOT = __DIR__ . "/..";
 
@@ -56,50 +49,14 @@ $collector->setDefaultInvocationStrategy(new RequestResponseArgs());
 // Decode Body middleware
 $app->addBodyParsingMiddleware();
 
-// Error Middleware
-$error_middleware = $app->addErrorMiddleware(true, true, true);
-
-// Get the default error handler
-$error_handler = $error_middleware->getDefaultErrorHandler();
-
-// Force the content type to be JSON for all errors
-$error_handler->forceContentType('application/json');
-
-
-$app // We add all headers to all responses
-    ->add(HeaderMiddleware::class);
-
+// Error Middleware ( 404 ect..) default to HTML but respoect Accept header from the request
+$app->addErrorMiddleware(true, true, true);
 
 
 // API
 // --
 
-
-
-
-$app->group("/api/v1.0/produit/", function (RouteCollectorProxy $group) {
-
-
-
-    $group->group("", function (RouteCollectorProxy $group) {
-
-        // list query params : limit, offset, order
-        $group->get("list", [Products::class, "list"]);
-
-        $group->post("new", [Products::class, "create"]);
-
-        $group->delete("delete", [Products::class, "delete"]);
-
-        $group->put("update", [Products::class, "update"]);
-    })
-        ->add(BodyValidationMiddleware::class);
-
-
-
-    $group->get("listone/{id:[0-9]+}", [Products::class, "listOne"])
-        ->add(IdMiddleware::class);
-});
-
+require_once PROJECT_ROOT . '/config/routes.php';
 
 
 $app->run();
