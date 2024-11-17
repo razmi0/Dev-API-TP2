@@ -12,12 +12,11 @@ return [
     ProductDao::class => function () {
         return new ProductDao(
             new Connection(
-
-                host: "localhost:3306",
-                username: "root",
-                password: "",
-                db_name: "db_labrest",
-                table_name: "T_PRODUIT"
+                host: $_ENV["DB_HOST"],
+                username: $_ENV["DB_USER"],
+                password: $_ENV["DB_PASS"],
+                db_name: $_ENV["DB_NAME"],
+                table_name: $_ENV["DB_TABLE_PRODUCTS"]
             )
         );
     },
@@ -27,11 +26,11 @@ return [
     UserDao::class => function () {
         return new UserDao(
             new Connection(
-                host: "localhost:3306",
-                username: "root",
-                password: "",
-                db_name: "db_labrest",
-                table_name: "T_USER"
+                host: $_ENV["DB_HOST"],
+                username: $_ENV["DB_USER"],
+                password: $_ENV["DB_PASS"],
+                db_name: $_ENV["DB_NAME"],
+                table_name: $_ENV["DB_TABLE_USERS"]
             )
         );
     },
