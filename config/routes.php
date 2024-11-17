@@ -3,6 +3,7 @@
 
 use Slim\Routing\RouteCollectorProxy;
 use API\Controller\{
+    Home,
     Products,
     Signup
 };
@@ -13,6 +14,7 @@ use API\Middleware\{
     BodyValidationMiddleware
 };
 
+$app->get("/", Home::class);
 
 $app->get("/signup", [Signup::class, "new"]);
 
