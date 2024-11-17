@@ -198,6 +198,11 @@ class User
         ];
     }
 
+    public function toJson()
+    {
+        return json_encode($this->toArray());
+    }
+
     public static function toArrayBulk(array $users): array
     {
         return array_map(fn($user) => $user->toArray(), $users);
