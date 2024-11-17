@@ -1,5 +1,7 @@
 <?php
 
+use Dotenv\Dotenv;
+
 use DI\ContainerBuilder;
 
 use DI\Container;
@@ -13,6 +15,10 @@ use Slim\{
 const PROJECT_ROOT = __DIR__ . "/..";
 
 require PROJECT_ROOT . '/vendor/autoload.php';
+
+$dotenv = Dotenv::createImmutable(PROJECT_ROOT, '.env.local');
+
+$dotenv->load();
 
 /**
  * Create a container using PHP-DI (Dependency Injection) builder
@@ -51,6 +57,7 @@ $app->addBodyParsingMiddleware();
 
 // Error Middleware ( 404 ect..) default to HTML but respoect Accept header from the request
 $app->addErrorMiddleware(true, true, true);
+
 
 
 // API

@@ -9,9 +9,7 @@ namespace API\Model\Entity;
  * @property string $id
  * @property string $username
  * @property string $email
- * @property string $password
  * @property string $password_hash
- * @property string $api_key
  * @property string $api_key_hash
  * @property string $created_at
  * @property string $updated_at
@@ -19,18 +17,14 @@ namespace API\Model\Entity;
  * @method string getId()
  * @method string getUsername()
  * @method string getEmail()
- * @method string getPassword()
  * @method string getPasswordHash()
- * @method string getApiKey()
  * @method string getApiKeyHash()
  * @method string getCreatedAt()
  * @method string getUpdatedAt()
  * @method setId(string $id)
  * @method setUsername(string $username)
  * @method setEmail(string $email)
- * @method setPassword(string $password)
  * @method setPasswordHash(string $password_hash)
- * @method setApiKey(string $api_key)
  * @method setApiKeyHash(string $api_key_hash)
  * @method setCreatedAt(string $created_at)
  * @method setUpdatedAt(string $updated_at)
@@ -42,9 +36,7 @@ class User
         private ?string $id = null,
         private ?string $username = null,
         private ?string $email = null,
-        private ?string $password = null,
         private ?string $password_hash = null,
-        private ?string $api_key = null,
         private ?string $api_key_hash = null,
         private ?string $created_at = null,
         private ?string $updated_at = null
@@ -56,9 +48,7 @@ class User
             $data["id"] ?? null,
             $data["username"] ?? null,
             $data["email"] ?? null,
-            $data["password"] ?? null,
             $data["password_hash"] ?? null,
-            $data["api_key"] ?? null,
             $data["api_key_hash"] ?? null,
             $data["created_at"] ?? date("Y-m-d H:i:s"),
             $data["updated_at"] ?? date("Y-m-d H:i:s")
@@ -73,9 +63,7 @@ class User
                 $user["id"] ?? null,
                 $user["username"] ?? null,
                 $user["email"] ?? null,
-                $user["password"] ?? null,
                 $user["password_hash"] ?? null,
-                $user["api_key"] ?? null,
                 $user["api_key_hash"] ?? null,
                 $user["created_at"] ?? date("Y-m-d H:i:s"),
                 $user["updated_at"] ?? date("Y-m-d H:i:s")
@@ -117,17 +105,6 @@ class User
         return $this;
     }
 
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
-    public function setPassword($password)
-    {
-        $this->password = $password;
-        return $this;
-    }
-
     public function getPasswordHash()
     {
         return $this->password_hash;
@@ -136,17 +113,6 @@ class User
     public function setPasswordHash($password_hash)
     {
         $this->password_hash = $password_hash;
-        return $this;
-    }
-
-    public function getApiKey()
-    {
-        return $this->api_key;
-    }
-
-    public function setApiKey($api_key)
-    {
-        $this->api_key = $api_key;
         return $this;
     }
 
@@ -189,9 +155,7 @@ class User
             "id" => $this->id,
             "username" => $this->username,
             "email" => $this->email,
-            "password" => $this->password,
             "password_hash" => $this->password_hash,
-            "api_key" => $this->api_key,
             "api_key_hash" => $this->api_key_hash,
             "created_at" => $this->created_at,
             "updated_at" => $this->updated_at

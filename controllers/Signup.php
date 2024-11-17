@@ -69,9 +69,7 @@ class Signup
         $api_key = bin2hex(random_bytes(32));
 
         // hashing the api key
-        $data["api_key"] = $api_key;
-
-        $data["api_key_hash"] = password_hash($api_key, PASSWORD_DEFAULT);
+        $data["api_key_hash"] = hash_hmac("sha256", $api_key, $_ENV["API_ENCRYPTION_KEY"]);
 
         // Creating user entity
         $user = User::make($data);
@@ -79,7 +77,7 @@ class Signup
         // Creating user dao
         $insertedId = $this->userDao->create($user);
 
-        print_r($insertedId);
+        $response->getBody()->write("Here is your apikey : $api_key");
 
         return $response;
     }
