@@ -55,7 +55,7 @@ $collector->setDefaultInvocationStrategy(new RequestResponseArgs());
 // Decode Body middleware
 $app->addBodyParsingMiddleware();
 
-// Error Middleware ( 404 ect..) default to HTML but respoect Accept header from the request
+// Error Middleware ( 404 ect..) default to HTML but respect Accept header from the request
 $app->addErrorMiddleware(true, true, true);
 
 

@@ -27,6 +27,7 @@ class Home
     public function __invoke(Request $request, Response $response)
     {
 
+
         $viewData = [
             ...self::BASIC_VIEW_DATA
         ];

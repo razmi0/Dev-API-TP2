@@ -23,6 +23,7 @@ class Signup
 
     const BASIC_VIEW_DATA = [
         "title" => "Signup",
+        "errors" => [],
     ];
 
     public function __construct(
@@ -55,10 +56,11 @@ class Signup
             // send the data and the errors to the view
             return $this->view->render($response, "signup.php", [
                 ...self::BASIC_VIEW_DATA,
-                "errors" => $this->validator->errors(),
+                "errors" => $this->validator->errors() ?? [],
                 "data" => $data
             ]);
         }
+
 
         // if the data is valid, we start the registration process
 
@@ -69,7 +71,7 @@ class Signup
         $api_key = bin2hex(random_bytes(32));
 
         // hashing the api key
-        $data["api_key_hash"] = hash_hmac("sha256", $api_key, $_ENV["API_ENCRYPTION_KEY"]);
+        $data["api_key_hash"] = hash_hmac("sha256", $api_key, $_ENV["API_HASH_KEY"]);
 
         // Creating user entity
         $user = User::make($data);
@@ -77,9 +79,7 @@ class Signup
         // Creating user dao
         $insertedId = $this->userDao->create($user);
 
-        $response->getBody()->write("Here is your apikey : $api_key");
-
-        return $response;
+        return $response->withStatus(302)->withHeader("Location", "/");
     }
 
     private function runValidation(array $rules, mixed $data): bool

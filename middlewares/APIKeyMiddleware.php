@@ -49,7 +49,7 @@ class APIKeyMiddleware
         }
 
         // we retrieve the api key hash from the api_key given by the user
-        $api_key_hash = hash_hmac("sha256", $apikey, $_ENV["API_ENCRYPTION_KEY"]);
+        $api_key_hash = hash_hmac("sha256", $apikey, $_ENV["API_HASH_KEY"]);
 
         // we check if the api key hash exists in the database
         $user = $this->userDao->find("api_key_hash", $api_key_hash);
