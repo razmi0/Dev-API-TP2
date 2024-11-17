@@ -4,38 +4,75 @@
 use Slim\Routing\RouteCollectorProxy;
 use API\Controller\{
     Home,
+    Login,
     Products,
-    Signup
+    Signup,
+    Profile
 };
 use API\Middleware\{
     HeaderMiddleware,
     IdMiddleware,
     APIKeyMiddleware,
-    BodyValidationMiddleware
+    AuthMiddleware,
+    BodyValidationMiddleware,
+    SessionMiddleware
 };
 
-$app->get("/", Home::class);
 
-$app->get("/signup", [Signup::class, "new"]);
+/**
+ * Public routes
+ */
 
-$app->post("/signup", [Signup::class, "create"]);
+$app->group("", function (RouteCollectorProxy $publicRoutes) {
+
+    $publicRoutes->get("/", Home::class);
+
+    $publicRoutes->group("/signup", function (RouteCollectorProxy $signup) {
+
+        $signup->get("", [Signup::class, "new"]);
+
+        $signup->post("", [Signup::class, "create"]);
+    });
 
 
-$app->group("/api/v1.0/produit/", function (RouteCollectorProxy $group) {
+    $publicRoutes->group("/login", function (RouteCollectorProxy $login) {
 
-    $group->get("listone/{id:[0-9]+}", [Products::class, "listOne"])
+        $login->get("", [Login::class, "new"]);
+
+        $login->post("", [Login::class, "create"]);
+    });
+
+    $publicRoutes->group("", function (RouteCollectorProxy $authProtected) {
+
+        $authProtected->get("/logout", [Login::class, "destroy"]);
+
+        $authProtected->get("/profile", [Profile::class, "show"])
+            ->add(AuthMiddleware::class);
+    });
+
+    //
+})->add(SessionMiddleware::class);
+
+
+
+/**
+ * Protected by api key routes
+ */
+$app->group("/api/v1.0/produit/", function (RouteCollectorProxy $apiRoutes) {
+
+    $apiRoutes->get("listone/{id:[0-9]+}", [Products::class, "listOne"])
         ->add(IdMiddleware::class);
 
-    $group->group("", function (RouteCollectorProxy $group) {
+    $apiRoutes->group("", function (RouteCollectorProxy $routeWithBodyValidation) {
 
         // list query params : limit, offset, order
-        $group->get("list", [Products::class, "list"]);
+        $routeWithBodyValidation->get("list", [Products::class, "list"]);
 
-        $group->post("new", [Products::class, "create"]);
+        $routeWithBodyValidation->post("new", [Products::class, "create"]);
 
-        $group->delete("delete", [Products::class, "delete"]);
+        $routeWithBodyValidation->delete("delete", [Products::class, "delete"]);
 
-        $group->put("update", [Products::class, "update"]);
+        $routeWithBodyValidation->put("update", [Products::class, "update"]);
     })
         ->add(BodyValidationMiddleware::class);
 })
