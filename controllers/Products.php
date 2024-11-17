@@ -1,7 +1,5 @@
 <?php
 
-
-
 namespace API\Controller;
 
 use API\Model\Dao\ProductDao;
