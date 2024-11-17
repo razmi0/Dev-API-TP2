@@ -8,9 +8,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as Handler;
 use Valitron\Validator;
 use Slim\Routing\RouteContext;
-use Slim\Exception\HttpBadRequestException;
-
-
+use Slim\Psr7\Factory\ResponseFactory;
 
 class BodyValidationMiddleware
 {
@@ -40,7 +38,7 @@ class BodyValidationMiddleware
         ]
     ];
 
-    public function __construct(private Validator $validator) {}
+    public function __construct(private Validator $validator, private ResponseFactory $factory) {}
 
     public function __invoke(Request $request, Handler $handler): Response
     {
@@ -65,7 +63,11 @@ class BodyValidationMiddleware
                 ]
             );
 
-            throw new HttpBadRequestException($request, $payload);
+            $response = $this->factory->createResponse(400);
+
+            $response->getBody()->write($payload);
+
+            return $response;
         }
 
         return $response;
