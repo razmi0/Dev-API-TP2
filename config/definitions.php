@@ -1,6 +1,6 @@
 <?php
 
-use API\Model\Dao\{Connection};
+use API\Model\Dao\{Connection, ProductDao, UserDao};
 use Slim\Views\PhpRenderer;
 
 /**
@@ -9,13 +9,30 @@ use Slim\Views\PhpRenderer;
 return [
 
     // ProductDao DI configuration ( connection data )
-    Connection::class => function () {
-        return new Connection(
-            host: "localhost:3306",
-            username: "root",
-            password: "",
-            db_name: "db_labrest",
-            table_name: "T_PRODUIT"
+    ProductDao::class => function () {
+        return new ProductDao(
+            new Connection(
+
+                host: "localhost:3306",
+                username: "root",
+                password: "",
+                db_name: "db_labrest",
+                table_name: "T_PRODUIT"
+            )
+        );
+    },
+
+
+    // UserDao DI configuration ( connection data )
+    UserDao::class => function () {
+        return new UserDao(
+            new Connection(
+                host: "localhost:3306",
+                username: "root",
+                password: "",
+                db_name: "db_labrest",
+                table_name: "T_USER"
+            )
         );
     },
 
