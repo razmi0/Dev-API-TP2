@@ -1,10 +1,3 @@
-<!-- * @property string $id
- * @property string $username
- * @property string $email
- * @property string $password_hash
- * @property string $api_key_hash
- * @property string $created_at
- * @property string $updated_at -->
 <article>
     <header>
         <h1>Profile</h1>
@@ -24,7 +17,7 @@
             </li>
             <li>
                 <strong>API Key:</strong>
-                <span><?= htmlspecialchars($user->getApiKeyHash()) ?></span>
+                <span><?= htmlspecialchars($user->getApiKey()) ?></span>
             </li>
         </ul>
     </section>

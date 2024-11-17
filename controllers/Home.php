@@ -2,6 +2,7 @@
 
 namespace API\Controller;
 
+use API\Model\Dao\UserDao;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Views\PhpRenderer;
@@ -22,15 +23,14 @@ class Home
 
     public function __construct(
         private PhpRenderer $view,
+        private UserDao $userDao
     ) {}
 
     public function __invoke(Request $request, Response $response)
     {
-
-
-        $viewData = [
-            ...self::BASIC_VIEW_DATA
-        ];
+        $viewData = isset($_SESSION["user_id"])
+            ? [...self::BASIC_VIEW_DATA, "user" => $this->userDao->find("id", $_SESSION["user_id"])]
+            : self::BASIC_VIEW_DATA;
 
         return $this->view->render($response, "home.php", $viewData);
     }

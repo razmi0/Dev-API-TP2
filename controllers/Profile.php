@@ -9,6 +9,8 @@ use API\Model\{
     Entity\User,
     Dao\UserDao
 };
+use Defuse\Crypto\Crypto;
+use Defuse\Crypto\Key;
 
 class Profile
 {
@@ -37,6 +39,12 @@ class Profile
     public function show(Request $request, Response $response): Response
     {
         $user = $request->getAttribute("user");
+
+        $encryption_key = Key::loadFromAsciiSafeString($_ENV["API_ENCRYPTION_KEY"]);
+
+        $api_key = Crypto::decrypt($user->getApiKey(), $encryption_key);
+
+        $user->setApiKey($api_key);
 
         if ($user === null) {
             return $response->withHeader("Location", "/login")->withStatus(302);

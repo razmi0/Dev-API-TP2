@@ -10,6 +10,7 @@ namespace API\Model\Entity;
  * @property string $username
  * @property string $email
  * @property string $password_hash
+ * @property string $api_key
  * @property string $api_key_hash
  * @property string $created_at
  * @property string $updated_at
@@ -18,6 +19,7 @@ namespace API\Model\Entity;
  * @method string getUsername()
  * @method string getEmail()
  * @method string getPasswordHash()
+ * @method string getApiKey()
  * @method string getApiKeyHash()
  * @method string getCreatedAt()
  * @method string getUpdatedAt()
@@ -37,6 +39,7 @@ class User
         private ?string $username = null,
         private ?string $email = null,
         private ?string $password_hash = null,
+        private ?string $api_key = null,
         private ?string $api_key_hash = null,
         private ?string $created_at = null,
         private ?string $updated_at = null
@@ -49,6 +52,7 @@ class User
             $data["username"] ?? null,
             $data["email"] ?? null,
             $data["password_hash"] ?? null,
+            $data["api_key"] ?? null,
             $data["api_key_hash"] ?? null,
             $data["created_at"] ?? date("Y-m-d H:i:s"),
             $data["updated_at"] ?? date("Y-m-d H:i:s")
@@ -64,6 +68,7 @@ class User
                 $user["username"] ?? null,
                 $user["email"] ?? null,
                 $user["password_hash"] ?? null,
+                $user["api_key"] ?? null,
                 $user["api_key_hash"] ?? null,
                 $user["created_at"] ?? date("Y-m-d H:i:s"),
                 $user["updated_at"] ?? date("Y-m-d H:i:s")
@@ -116,6 +121,17 @@ class User
         return $this;
     }
 
+    public function getApiKey()
+    {
+        return $this->api_key;
+    }
+
+    public function setApiKey($api_key)
+    {
+        $this->api_key = $api_key;
+        return $this;
+    }
+
     public function getApiKeyHash()
     {
         return $this->api_key_hash;
@@ -156,6 +172,7 @@ class User
             "username" => $this->username,
             "email" => $this->email,
             "password_hash" => $this->password_hash,
+            "api_key" => $this->api_key,
             "api_key_hash" => $this->api_key_hash,
             "created_at" => $this->created_at,
             "updated_at" => $this->updated_at

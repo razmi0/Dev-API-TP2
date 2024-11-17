@@ -5,7 +5,7 @@ namespace API\Model\Dao;
 use PDO;
 use API\Model\{Entity\User, Dao\Connection};
 
-// COLUMNS : id, username, email, password_hash, api_key_hash, created_at, updated_at
+// COLUMNS : id, username, email, password_hash, api_key, api_key_hash, created_at, updated_at
 
 /**
  * Class UserDao
@@ -35,33 +35,22 @@ class UserDao
     public function create(User $user): int
     {
         // Build the query
-        $query = "INSERT INTO " . $this->connection->getTableName() . " (username, email, password_hash, api_key_hash)";
-        $query .= " VALUES (:username, :email, :password_hash, :api_key_hash)";
-
-
-        var_dump($this->connection->getTableName());
-
+        $query = "INSERT INTO " . $this->connection->getTableName() . " (username, email, password_hash, api_key, api_key_hash)";
+        $query .= " VALUES (:username, :email, :password_hash, :api_key, :api_key_hash)";
 
         // Verify the preparation of the query
         $prepared = $this->pdo->prepare($query);
 
         // Bind the parameters
-        $username = $user->getUsername();
-        $email = $user->getEmail();
-        $password_hash = $user->getPasswordHash();
-        $api_key_hash = $user->getApiKeyHash();
+        $prepared->bindParam(':username', $user->getUsername());
 
-        if (!is_null($username))
-            $prepared->bindParam(':username', $username);
+        $prepared->bindParam(':email', $user->getEmail());
 
-        if (!is_null($email))
-            $prepared->bindParam(':email', $email);
+        $prepared->bindParam(':password_hash', $user->getPasswordHash());
 
-        if (!is_null($password_hash))
-            $prepared->bindParam(':password_hash', $password_hash);
+        $prepared->bindParam(':api_key', $user->getApiKey());
 
-        if (!is_null($api_key_hash))
-            $prepared->bindParam(':api_key_hash', $api_key_hash);
+        $prepared->bindParam(':api_key_hash', $user->getApiKeyHash());
 
 
         // Execute the query
@@ -74,7 +63,9 @@ class UserDao
     }
 
 
-
+    /**
+     * Find a user in the database
+     */
     public function find(string $columns, mixed $value): User | bool
     {
         $query = "SELECT * FROM " . $this->connection->getTableName() . " WHERE $columns = :value";
@@ -91,5 +82,21 @@ class UserDao
             return User::make($fetch_result);
 
         return $fetch_result;
+    }
+
+    /**
+     * Delete a user in the database
+     */
+    public function delete(string $columns, mixed $value): bool
+    {
+        $query = "DELETE FROM " . $this->connection->getTableName() . " WHERE $columns = :value";
+
+        $prepared = $this->pdo->prepare($query);
+
+        $prepared->bindParam(':value', $value);
+
+        $prepared->execute();
+
+        return $prepared->rowCount() > 0;
     }
 }

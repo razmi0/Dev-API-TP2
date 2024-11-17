@@ -60,7 +60,7 @@ class APIKeyMiddleware
 
             $payload = json_encode(
                 [
-                    "message" => "API Key is missing",
+                    "message" => "API Key is invalid",
                     "error" => "Unauthorized",
                     "data" => [
                         "apikey" => $apikey
@@ -73,19 +73,6 @@ class APIKeyMiddleware
             return $response;
         }
 
-
-        $payload = json_encode(
-            [
-                "message" => "API Key is valid",
-                "error" => "",
-                "data" => [
-                    "user" => $user->toArray(),
-                    "apikey" => $apikey
-                ]
-            ]
-        );
-
-        $response->getBody()->write($payload);
 
         return $response;
     }

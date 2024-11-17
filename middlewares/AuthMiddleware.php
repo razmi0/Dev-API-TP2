@@ -29,7 +29,9 @@ class AuthMiddleware
             $user = $this->userDao->find("id", $_SESSION["user_id"]);
 
             if ($user) {
+
                 $request = $request->withAttribute("user", $user);
+
                 return $handler->handle($request);
             }
         }

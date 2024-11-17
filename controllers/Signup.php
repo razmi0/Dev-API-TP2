@@ -2,13 +2,19 @@
 
 namespace API\Controller;
 
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Views\PhpRenderer;
 use Valitron\Validator;
+use Psr\{
+    Http\Message\ResponseInterface as Response,
+    Http\Message\ServerRequestInterface as Request
+};
 use API\Model\{
     Entity\User,
     Dao\UserDao
+};
+use Defuse\{
+    Crypto\Crypto,
+    Crypto\Key
 };
 
 class Signup
@@ -30,7 +36,13 @@ class Signup
         private PhpRenderer $view,
         private Validator $validator,
         private UserDao $userDao
-    ) {}
+    ) {
+        // We add a custom validation rule to check if the email is already in the database
+        $this->validator->rule(function ($field, $value, $params, $fields) {
+
+            return  $this->userDao->find("email", $value) === false;
+        }, "email")->message("{field} already exists");
+    }
 
     public function new(Request $request, Response $response)
     {
@@ -70,6 +82,14 @@ class Signup
         // generate an api key
         $api_key = bin2hex(random_bytes(32));
 
+        // get the encryption key
+        /**
+         * @var Key
+         */
+        $encryption_key = Key::loadFromAsciiSafeString($_ENV["API_ENCRYPTION_KEY"]);
+
+        $data["api_key"] = Crypto::encrypt($api_key, $encryption_key);
+
         // hashing the api key
         $data["api_key_hash"] = hash_hmac("sha256", $api_key, $_ENV["API_HASH_KEY"]);
 
@@ -77,9 +97,14 @@ class Signup
         $user = User::make($data);
 
         // Creating user dao
-        $insertedId = $this->userDao->create($user);
+        $this->userDao->create($user);
 
-        return $response->withStatus(302)->withHeader("Location", "/");
+        return $response->withStatus(302)->withHeader("Location", "/signup/success");
+    }
+
+    public function success(Request $request, Response $response): Response
+    {
+        return $this->view->render($response, "signup-success.php", self::BASIC_VIEW_DATA);
     }
 
     private function runValidation(array $rules, mixed $data): bool

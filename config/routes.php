@@ -32,6 +32,8 @@ $app->group("", function (RouteCollectorProxy $publicRoutes) {
         $signup->get("", [Signup::class, "new"]);
 
         $signup->post("", [Signup::class, "create"]);
+
+        $signup->get("/success", [Signup::class, "success"]);
     });
 
 
