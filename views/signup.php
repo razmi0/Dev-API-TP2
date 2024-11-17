@@ -21,7 +21,8 @@
 
 <article>
     <header>
-        <h1>Sign in</h1>
+        <h1>Create your account</h1>
+        <small>and get your api key</small>
     </header>
     <form action="/signup" method="post">
 
