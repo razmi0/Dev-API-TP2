@@ -3,7 +3,8 @@
     "slim/slim": "^4.0.0",
     "slim/psr7": "^1.0.0",
     "php-di/php-di": "^7.0",
-    "vlucas/valitron": "^1.4"
+    "vlucas/valitron": "^1.4",
+    "slim/php-view": "^3.4"
   },
   "scripts": {
     "start": "php -S localhost:8080 -t public public/index.php"
