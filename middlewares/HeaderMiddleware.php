@@ -19,7 +19,7 @@ class HeaderMiddleware
         "Content-Type" => "application/json",
         "Access-Control-Allow-Origin" => "*",
         "Access-Control-Age" => 3600,
-        "Access-Control-Allow-Headers" => "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"
+        "Access-Control-Allow-Headers" => "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With, X-API-KEY",
     ];
 
 
