@@ -51,8 +51,6 @@ class Login
         // validation step
         $isValid = $this->runValidation(self::RULES, $data);
 
-        print_r($isValid);
-
         if ($isValid === false) {
 
             // send the data and the errors to the view
