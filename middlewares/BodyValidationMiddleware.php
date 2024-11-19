@@ -2,7 +2,6 @@
 
 namespace API\Middleware;
 
-use Exception;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as Handler;
@@ -10,31 +9,83 @@ use Valitron\Validator;
 use Slim\Routing\RouteContext;
 use Slim\Psr7\Factory\ResponseFactory;
 
+/**
+ * Middleware de validation des données du corps de la requête
+ */
 class BodyValidationMiddleware
 {
 
+    /**
+     * Regex pour le nom
+     */
     public const NAME_REGEX = "/^[a-zA-Z0-9-'%,.:\/&()|; ]+$/";
+
+    /**
+     * Regex pour la description
+     */
     public const DESCRIPTION_REGEX = "/^[a-zA-Z0-9-'%,.:\/&()|; ]+$/";
 
+    /**
+     * Règles de validation ( librairie vlucas/valitron )
+     */
     const RULES = [
         'create' => [
-            'name' => ['required', ['lengthBetween', 3, 50], ['regex', self::NAME_REGEX]],
-            'description' => ['required', ['lengthBetween', 3, 255], ['regex', self::DESCRIPTION_REGEX]],
-            'prix' => ['required', 'numeric', ['min', 0]]
+            'name' => [
+                'required',
+                ['lengthBetween', 3, 50],
+                ['regex', self::NAME_REGEX]
+            ],
+            'description' => [
+                'required',
+                ['lengthBetween', 3, 255],
+                ['regex', self::DESCRIPTION_REGEX]
+            ],
+            'prix' => [
+                'required',
+                'numeric',
+                ['min', 0]
+            ]
         ],
         'list' => [
-            'limit' => ['optional', 'integer', ['min', 1]],
-            'offset' => ['optional', 'integer', ['min', 0]],
-            'direction' => ['optional', ['in', ['ASC', 'DESC']]]
+            'limit' => [
+                'optional',
+                'integer',
+                ['min', 1]
+            ],
+            'offset' => [
+                'optional',
+                'integer',
+                ['min', 0]
+            ],
+            'direction' => [
+                'optional',
+                ['in', ['ASC', 'DESC']]
+            ]
         ],
         'update' => [
-            'id' => ['required', 'integer', ['min', 1]],
-            'name' => ['optional', ['lengthBetween', 3, 50], ['regex', self::NAME_REGEX]],
+            'id' => [
+                'required',
+                'integer',
+                ['min', 1]
+            ],
+            'name' => [
+                'optional',
+                ['lengthBetween', 3, 50],
+                ['regex', self::NAME_REGEX]
+            ],
             'description' => ['optional', ['lengthBetween', 3, 255], ['regex', self::DESCRIPTION_REGEX]],
-            'prix' => ['required', 'numeric', ['min', 0]]
+            'prix' => [
+                'required',
+                'numeric',
+                ['min', 0]
+            ]
         ],
         'delete' => [
-            'id' => ['required', 'integer', ['min', 1]]
+            'id' => [
+                'required',
+                'integer',
+                ['min', 1]
+            ]
         ]
     ];
 

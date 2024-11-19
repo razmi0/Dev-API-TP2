@@ -18,7 +18,7 @@ class Products
         /**
          * Create a new ProductDao object from DI container
          * ProductDao has Connection as a dependency
-         * PHP DI autowiring will inject the Connection object as we defined it
+         * PHP DI autowiring will inject the Connection object as we defined it with DB credentials
          * @see ../config/definitions.php
          */
 

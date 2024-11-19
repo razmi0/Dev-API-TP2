@@ -2,9 +2,7 @@
 
 use Dotenv\Dotenv;
 
-use DI\ContainerBuilder;
-
-use DI\Container;
+use DI\{ContainerBuilder, Container};
 
 use Slim\{
     Factory\AppFactory,
@@ -50,6 +48,7 @@ $app = AppFactory::create();
 $collector = $app->getRouteCollector();
 
 // Here we change the default behavior in regards to the way the route handler will parse the arguments from routes callbacks
+// instead of having an associative array "args", we directly have access to the property name (for exemple string $id)
 $collector->setDefaultInvocationStrategy(new RequestResponseArgs());
 
 // Decode Body middleware
